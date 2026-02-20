@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JUNONUNO</title>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
-<style> 
+<style>
 /* ═══════════════════════════════════════════
    ROOT & RESET
 ═══════════════════════════════════════════ */
@@ -36,23 +36,17 @@ body {
    CURSOR
 ═══════════════════════════════════════════ */
 #cur {
-  position:fixed; width:11px; height:11px;
-  border:2px solid var(--red);
-  transform:translate(-50%,-50%) rotate(45deg);
-  pointer-events:none; z-index:9999;
-  transition:width .15s,height .15s,background .15s,border-color .15s;
-}
-#cur-r {
-  position:fixed; width:30px; height:30px;
-  border:1px solid rgba(160,160,160,0.25);
-  border-radius:50%; pointer-events:none; z-index:9998;
+  position:fixed; width:36px; height:36px;
+  background:url('JN_Logo.png') center/contain no-repeat;
   transform:translate(-50%,-50%);
-  transition:width .25s,height .25s;
+  pointer-events:none; z-index:9999;
+  transition:width .15s, height .15s, opacity .15s;
+  filter:drop-shadow(0 0 4px rgba(192,36,42,0.5));
 }
-.cur-big #cur   { background:var(--red); width:7px; height:7px; }
-.cur-big #cur-r { width:42px; height:42px; }
+#cur-r { display:none; }
+.cur-big #cur { width:48px; height:48px; filter:drop-shadow(0 0 8px rgba(192,36,42,0.8)); }
 
-@media (pointer:coarse) { #cur,#cur-r { display:none; } body { cursor:auto; } }
+@media (pointer:coarse) { #cur { display:none; } body { cursor:auto; } }
 
 /* ═══════════════════════════════════════════
    PAGE SYSTEM
@@ -498,7 +492,6 @@ body {
 <body>
 
 <div id="cur"></div>
-<div id="cur-r"></div>
 
 <!-- ══════════════════════════════════════
      PAGE: HOME
@@ -529,8 +522,8 @@ body {
       <img src="JN_Logo.png" alt="Junonuno" class="home-logo">
     </div>
     <div class="home-cta">
-      <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="btn btn-primary">Listen on Spotify</a>
-      <button onclick="goTo('shows')" class="btn">Upcoming Shows</button>
+      <button onclick="goTo('music')" class="btn btn-primary">Listen</button>
+      <button onclick="goTo('shows')" class="btn">Upcoming Events</button>
     </div>
   </div>
 
@@ -747,7 +740,7 @@ body {
       <div class="connect-panel">
         <span class="panel-label">Socials &amp; Contact</span>
         <p class="connect-blurb">Reach out, say hello, tell us your favourite biscuit. We are real human beings who do human things, so we will probably reply.</p>
-        <a href="mailto:junonunomail@gmail.com" class="connect-email-link">junonunomail@gmail.com</a>
+        <a href="/cdn-cgi/l/email-protection#107a657e7f7e657e7f7d71797c50777d71797c3e737f7d" class="connect-email-link"><span class="__cf_email__" data-cfemail="91fbe4fffeffe4fffefcf0f8fdd1f6fcf0f8fdbff2fefc">[email&#160;protected]</span></a>
         <div class="socials-stack">
           <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="social-row">
             <svg class="sicon" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
@@ -784,16 +777,14 @@ body {
 <!-- ═══════════════════════════════════════════
      JS
 ═══════════════════════════════════════════ -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── Cursor ──
 const cur = document.getElementById('cur');
-const curR = document.getElementById('cur-r');
-let mx=0,my=0,rx=0,ry=0;
+let mx=0,my=0;
 document.addEventListener('mousemove',e=>{
   mx=e.clientX; my=e.clientY;
   cur.style.left=mx+'px'; cur.style.top=my+'px';
 });
-(function anim(){ rx+=(mx-rx)*.1; ry+=(my-ry)*.1; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(anim); })();
 document.querySelectorAll('a,button').forEach(el=>{
   el.addEventListener('mouseenter',()=>document.body.classList.add('cur-big'));
   el.addEventListener('mouseleave',()=>document.body.classList.remove('cur-big'));
@@ -841,7 +832,6 @@ document.addEventListener('touchend',e=>{
   if(dx < -60 && i<order.length-1) goTo(order[i+1]);
   if(dx >  60 && i>0) goTo(order[i-1]);
 });
-// hi
 </script>
 
 </body>
