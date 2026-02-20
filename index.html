@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JUNONUNO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Special+Elite&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #060606;
+    --deep-red: #8b1a1a;
+    --red: #c0242a;
+    --red-glow: rgba(160,30,30,0.18);
+    --silver-hi: #f0f0f0;
+    --silver-mid: #b8b8b8;
+    --silver-lo: #686868;
+    --silver-dim: #2a2a2a;
+    --cream: #e8e0d0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--silver-hi);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CURSOR ── */
+  #cur { position:fixed; width:8px; height:8px; background:#fff; border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); mix-blend-mode:difference; transition:width .15s,height .15s; }
+  #cur-r { position:fixed; width:28px; height:28px; border:1px solid rgba(220,60,60,0.55); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:200;
+    display: flex; justify-content:space-between; align-items:center;
+    padding: 1.4rem 3rem;
+    background: linear-gradient(to bottom, rgba(6,6,6,0.97) 0%, transparent 100%);
+  }
+  .nav-logo img {
+    height: 52px; width: auto;
+    filter: drop-shadow(0 0 8px rgba(200,200,200,0.2));
+    transition: filter .3s;
+  }
+  .nav-logo img:hover { filter: drop-shadow(0 0 14px rgba(200,60,60,0.5)); }
+  .nav-links { display:flex; gap:2.4rem; list-style:none; }
+  .nav-links a {
+    font-size:.62rem; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--silver-lo); text-decoration:none; transition:color .25s;
+    position:relative;
+  }
+  .nav-links a::after {
+    content:''; position:absolute; bottom:-3px; left:0; right:100%;
+    height:1px; background:var(--red); transition:right .3s;
+  }
+  .nav-links a:hover { color:var(--silver-hi); }
+  .nav-links a:hover::after { right:0; }
+
+  /* ── HERO ── */
+  #hero {
+    height: 100vh; position:relative; overflow:hidden;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+    padding-bottom: 8vh;
+  }
+
+  .hero-bg {
+    position:absolute; inset:0;
+    background-image: url('BG2U7945.jpg');
+    background-size:cover; background-position:center 20%;
+    filter: brightness(0.38) saturate(0.6);
+    transition: transform 8s ease;
+  }
+
+  .hero-vignette {
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 90% 80% at 50% 40%, transparent 30%, rgba(6,6,6,0.7) 80%),
+      linear-gradient(to bottom, rgba(6,6,6,0.3) 0%, transparent 30%, transparent 55%, rgba(6,6,6,0.95) 100%);
+  }
+
+  /* vintage scan lines */
+  .hero-texture {
+    position:absolute; inset:0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 3px);
+    opacity:.5; pointer-events:none;
+  }
+
+  /* red accent line */
+  .hero-redline {
+    position:absolute; top:0; left:0; right:0; height:2px;
+    background: linear-gradient(to right, transparent, var(--red) 30%, var(--red) 70%, transparent);
+  }
+
+  .hero-content { position:relative; z-index:2; text-align:center; }
+
+  .hero-logo {
+    width: min(460px, 78vw);
+    filter: drop-shadow(0 0 30px rgba(180,180,180,0.25)) drop-shadow(0 0 60px rgba(139,26,26,0.3));
+    animation: logoIn 1.4s cubic-bezier(0.16,1,0.3,1) forwards;
+    opacity:0; transform:scale(0.88);
+  }
+  @keyframes logoIn { to { opacity:1; transform:scale(1); } }
+
+  .hero-tagline {
+    margin-top:.9rem;
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(.75rem,2vw,1rem);
+    letter-spacing:.35em; text-transform:uppercase;
+    color: var(--silver-mid);
+    animation: fadeUp 1.2s .5s forwards; opacity:0; transform:translateY(10px);
+  }
+  .hero-cta {
+    margin-top: 2.4rem; display:flex; gap:.9rem; justify-content:center;
+    animation: fadeUp 1.2s .7s forwards; opacity:0; transform:translateY(10px);
+  }
+  @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+  .hero-scroll {
+    position:absolute; bottom:1.8rem; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:.5rem;
+    animation: fadeUp 1.5s 1.2s forwards; opacity:0;
+  }
+  .hero-scroll span { font-size:.55rem; letter-spacing:.3em; color:var(--silver-lo); text-transform:uppercase; }
+  .scroll-line { width:1px; height:34px; background:linear-gradient(to bottom, var(--red), transparent); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display:inline-block; padding:.7rem 1.8rem;
+    font-family:'DM Mono',monospace; font-size:.62rem; letter-spacing:.2em; text-transform:uppercase;
+    text-decoration:none; border:1px solid var(--silver-lo); color:var(--silver-hi);
+    background:transparent; transition:all .3s; cursor:none; position:relative; overflow:hidden;
+  }
+  .btn::before {
+    content:''; position:absolute; inset:0;
+    background:var(--red); transform:scaleX(0); transform-origin:left; transition:transform .3s; z-index:0;
+  }
+  .btn:hover { border-color:var(--red); color:#fff; }
+  .btn:hover::before { transform:scaleX(1); }
+  .btn span { position:relative; z-index:1; }
+  .btn-solid { background:var(--red); border-color:var(--red); }
+  .btn-solid::before { background:var(--black); }
+  .btn-solid:hover { color:var(--silver-hi); border-color:var(--silver-lo); }
+
+  /* ── CHROME BAR ── */
+  .chrome-bar { width:100%; height:2px; background:linear-gradient(to right, transparent, #555 20%, #ccc 50%, #555 80%, transparent); }
+  .red-bar { width:100%; height:1px; background:linear-gradient(to right, transparent, var(--deep-red) 30%, var(--red) 50%, var(--deep-red) 70%, transparent); }
+  .divider { width:100%; height:1px; background:linear-gradient(to right, transparent, var(--silver-dim), transparent); }
+
+  /* ── SECTION SHARED ── */
+  .section-wrap { padding:6rem 3rem; max-width:1200px; margin:0 auto; }
+  .section-label {
+    font-size:.58rem; letter-spacing:.4em; text-transform:uppercase;
+    color:var(--silver-lo); margin-bottom:.9rem;
+    display:flex; align-items:center; gap:1rem;
+  }
+  .section-label::before { content:''; width:24px; height:1px; background:var(--red); display:block; }
+  .section-title {
+    font-family:'Playfair Display', serif; font-style:italic;
+    font-size:clamp(2.8rem,5.5vw,5.5rem); font-weight:900;
+    line-height:1; margin-bottom:2.8rem;
+    background:linear-gradient(135deg, #fff 0%, #bbb 50%, #fff 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+
+  /* ── ABOUT ── */
+  #about { background:linear-gradient(180deg, var(--black) 0%, rgba(80,10,10,0.08) 50%, var(--black) 100%); }
+  .about-inner { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+
+  .bio-text {
+    font-size:.88rem; line-height:2; color:var(--silver-mid); margin-bottom:1.4rem;
+  }
+  .bio-text em { color:var(--silver-hi); font-style:normal; }
+  .bio-fun {
+    margin-top:1.8rem; padding:1rem 1.4rem;
+    border-left:2px solid var(--red);
+    font-family:'Special Elite', cursive; font-size:.8rem; line-height:1.8;
+    color:var(--silver-lo);
+  }
+
+  .bio-photo-stack { position:relative; }
+  .bio-photo-main {
+    width:100%; aspect-ratio:3/4; object-fit:cover; object-position:center top;
+    display:block; filter:grayscale(20%) contrast(1.05);
+    border:1px solid var(--silver-dim);
+  }
+  .bio-photo-accent {
+    position:absolute; bottom:-24px; right:-24px;
+    width:55%; aspect-ratio:1/1; object-fit:cover; object-position:center;
+    filter:grayscale(30%) contrast(1.05);
+    border:2px solid var(--black); outline:1px solid var(--silver-dim);
+  }
+  .photo-credit { margin-top:.7rem; font-size:.55rem; letter-spacing:.2em; color:var(--silver-lo); text-transform:uppercase; }
+
+  /* ── PHOTO STRIP ── */
+  #strip { overflow:hidden; padding:0; }
+  .strip-inner {
+    display:grid; grid-template-columns:1.4fr 1fr 1fr;
+    height:420px; gap:2px;
+  }
+  .strip-img {
+    overflow:hidden; position:relative;
+  }
+  .strip-img img {
+    width:100%; height:100%; object-fit:cover;
+    filter:grayscale(15%) contrast(1.05) brightness(0.85);
+    transition:filter .5s, transform .5s;
+  }
+  .strip-img:hover img { filter:grayscale(0%) contrast(1.1) brightness(1); transform:scale(1.03); }
+  .strip-img::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(to bottom, transparent 50%, rgba(6,6,6,0.55) 100%);
+  }
+
+  /* ── MUSIC ── */
+  #music { }
+  .music-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5px; background:var(--silver-dim); border:1px solid var(--silver-dim); }
+  .music-card {
+    background:var(--black); padding:2rem; position:relative; overflow:hidden;
+    transition:background .3s;
+  }
+  .music-card::before {
+    content:''; position:absolute; top:0; left:0; right:100%; height:2px;
+    background:linear-gradient(to right, var(--red), transparent); transition:right .4s;
+  }
+  .music-card:hover { background:#0d0505; }
+  .music-card:hover::before { right:0; }
+  .music-num { font-size:.52rem; letter-spacing:.3em; color:var(--silver-lo); margin-bottom:1.3rem; text-transform:uppercase; }
+  .music-title { font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:1.6rem; color:var(--silver-hi); margin-bottom:.25rem; line-height:1.1; }
+  .music-meta { font-size:.6rem; letter-spacing:.18em; color:var(--silver-lo); margin-bottom:1.8rem; text-transform:uppercase; }
+  .music-links { display:flex; flex-wrap:wrap; gap:.5rem; }
+  .music-link {
+    font-size:.58rem; letter-spacing:.12em; padding:.35rem .75rem;
+    border:1px solid var(--silver-dim); color:var(--silver-lo); text-decoration:none;
+    transition:all .2s; text-transform:uppercase; cursor:none;
+  }
+  .music-link:hover { border-color:var(--red); color:var(--silver-hi); }
+
+  /* ── EVENTS ── */
+  #events { background:linear-gradient(180deg, var(--black) 0%, rgba(80,10,10,0.06) 50%, var(--black) 100%); }
+  .events-list { display:flex; flex-direction:column; }
+  .event-row {
+    display:grid; grid-template-columns:130px 1fr 190px 150px;
+    gap:2rem; align-items:center;
+    padding:1.8rem 0; border-bottom:1px solid var(--silver-dim);
+    position:relative;
+  }
+  .event-row:first-child { border-top:1px solid var(--silver-dim); }
+  .event-row::before {
+    content:''; position:absolute; left:-3rem; right:-3rem; top:0; bottom:0;
+    background:transparent; transition:background .2s; pointer-events:none;
+  }
+  .event-row:hover::before { background:rgba(139,26,26,0.07); }
+  .event-date { font-size:.63rem; letter-spacing:.14em; color:var(--silver-lo); text-transform:uppercase; font-family:'Special Elite',cursive; }
+  .event-venue { font-family:'Playfair Display',serif; font-style:italic; font-size:1.3rem; font-weight:700; color:var(--silver-hi); line-height:1.1; }
+  .event-venue small { display:block; font-family:'DM Mono',monospace; font-size:.58rem; letter-spacing:.15em; color:var(--silver-lo); margin-top:.2rem; text-transform:uppercase; font-style:normal; }
+  .event-tag {
+    font-size:.56rem; letter-spacing:.18em; text-transform:uppercase;
+    padding:.3rem .7rem; border:1px solid var(--silver-dim); color:var(--silver-lo);
+    display:inline-block; width:fit-content;
+  }
+  .event-tag.avail { border-color:var(--deep-red); color:var(--red); }
+  .event-tag.sold-out { border-color:#333; color:#333; text-decoration:line-through; }
+  .event-ticket { text-align:right; }
+  .event-ticket a {
+    font-size:.58rem; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--silver-mid); text-decoration:none; border-bottom:1px solid var(--silver-lo);
+    padding-bottom:2px; transition:color .2s, border-color .2s; cursor:none;
+  }
+  .event-ticket a:hover { color:#fff; border-color:var(--red); }
+
+  /* ── GALLERY ── */
+  #gallery { overflow:hidden; padding:0; }
+  .gallery-scroll {
+    display:flex; gap:3px;
+    padding: 0;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .gallery-scroll::-webkit-scrollbar { display:none; }
+  .gallery-item {
+    flex-shrink:0; width:380px; height:480px;
+    scroll-snap-align:start; overflow:hidden; position:relative;
+  }
+  .gallery-item img {
+    width:100%; height:100%; object-fit:cover; object-position:center top;
+    filter:grayscale(10%) brightness(0.85);
+    transition:filter .5s, transform .6s;
+  }
+  .gallery-item:hover img { filter:grayscale(0%) brightness(1); transform:scale(1.04); }
+
+  /* ── CONNECT ── */
+  #connect { text-align:center; position:relative; overflow:hidden; }
+  .connect-bg {
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse 60% 70% at center, rgba(120,20,20,0.1) 0%, transparent 70%);
+  }
+  .socials-grid {
+    display:flex; flex-wrap:wrap; justify-content:center;
+    gap:.8rem; margin-top:2.8rem;
+  }
+  .social-link {
+    display:flex; align-items:center; gap:.65rem;
+    padding:.9rem 1.6rem; border:1px solid var(--silver-dim);
+    color:var(--silver-mid); text-decoration:none;
+    font-size:.6rem; letter-spacing:.18em; text-transform:uppercase;
+    transition:all .3s; cursor:none; position:relative; overflow:hidden;
+  }
+  .social-link::before {
+    content:''; position:absolute; inset:0; background:var(--red);
+    transform:scaleX(0); transform-origin:left; transition:transform .3s; z-index:0;
+  }
+  .social-link:hover { color:#fff; border-color:var(--red); }
+  .social-link:hover::before { transform:scaleX(1); }
+  .social-link span { position:relative; z-index:1; }
+  .sicon { width:14px; height:14px; fill:currentColor; position:relative; z-index:1; flex-shrink:0; }
+
+  .mailing-wrap { margin-top:3.5rem; display:flex; flex-direction:column; align-items:center; gap:1rem; }
+  .mailing-label { font-size:.6rem; letter-spacing:.28em; text-transform:uppercase; color:var(--silver-lo); }
+  .mailing-btn {
+    display:inline-block; margin-top:.5rem;
+    padding:.85rem 2.4rem;
+    font-family:'DM Mono',monospace; font-size:.65rem; letter-spacing:.2em; text-transform:uppercase;
+    text-decoration:none; border:1px solid var(--red); color:var(--silver-hi);
+    background:transparent; transition:all .3s; cursor:none; position:relative; overflow:hidden;
+  }
+  .mailing-btn::before {
+    content:''; position:absolute; inset:0; background:var(--red);
+    transform:scaleX(0); transform-origin:left; transition:transform .3s; z-index:0;
+  }
+  .mailing-btn:hover::before { transform:scaleX(1); }
+  .mailing-btn span { position:relative; z-index:1; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top:1px solid var(--silver-dim); padding:2.2rem 3rem;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .footer-logo img { height:36px; filter:grayscale(100%) brightness(0.5); }
+  footer p { font-size:.56rem; letter-spacing:.15em; color:var(--silver-lo); text-transform:uppercase; }
+  footer a { color:var(--silver-mid); text-decoration:none; transition:color .2s; cursor:none; }
+  footer a:hover { color:var(--red); }
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0; transform:translateY(20px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* ── VINTAGE GRAIN overlay ── */
+  body::after {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:1000;
+    opacity:.028;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat:repeat; background-size:200px;
+  }
+
+  @media (max-width:768px) {
+    nav { padding:1.1rem 1.4rem; }
+    .nav-links { display:none; }
+    .section-wrap { padding:4.5rem 1.4rem; }
+    .about-inner { grid-template-columns:1fr; gap:2.5rem; }
+    .bio-photo-accent { display:none; }
+    .strip-inner { grid-template-columns:1fr 1fr; height:280px; }
+    .strip-inner .strip-img:last-child { display:none; }
+    .music-grid { grid-template-columns:1fr; }
+    .event-row { grid-template-columns:1fr 1fr; row-gap:.6rem; }
+    .event-ticket { text-align:left; grid-column:1/-1; }
+    footer { flex-direction:column; gap:1rem; text-align:center; }
+    .gallery-item { width:280px; height:360px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo"><img src="JN_Logo.png" alt="Junonuno"></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#music">Music</a></li>
+    <li><a href="#events">Shows</a></li>
+    <li><a href="#connect">Connect</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-texture"></div>
+  <div class="hero-redline"></div>
+  <div class="hero-content">
+    <img src="JN_Logo.png" alt="Junonuno" class="hero-logo">
+    <p class="hero-tagline">Other-worldly &nbsp;·&nbsp; Bristol &nbsp;·&nbsp; Dance &nbsp;·&nbsp; Now</p>
+    <div class="hero-cta">
+      <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="btn btn-solid"><span>Listen on Spotify</span></a>
+      <a href="#events" class="btn"><span>Upcoming Shows</span></a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="chrome-bar"></div>
+
+<!-- ABOUT -->
+<section id="about" style="max-width:100%;padding:0;">
+  <div class="section-wrap">
+    <div class="about-inner">
+      <div class="reveal">
+        <div class="section-label">About</div>
+        <h2 class="section-title">The Band</h2>
+        <p class="bio-text">
+          This is <em>Junonuno.</em> An other-worldly artistic group built by <em>DJ Juno</em> and <em>Nuno.</em>
+          The (sometimes) Bristol-based duo present catchy, old-school dance songs with a 90s house-inspired soul
+          and pop-adjacent lyrics.
+        </p>
+        <p class="bio-text">
+          You'll find DJ Juno on the guitar — he's also the tech whizz behind those beats — while Nuno is the
+          ethereal voice leading you to boogie land. On stage, they're joined by <em>Uno</em> on bass and
+          <em>Twono</em> banging the drums, who create the unforgettable atmosphere at a Junonuno gig.
+          You really have to see it to believe it.
+        </p>
+        <div class="bio-fun">
+          Fun fact: Junonuno love to do human things like sit in a chair, eat food and play sports.<br>
+          <span style="color:var(--red);font-size:.75rem;">⚠ Warning:</span> Do NOT try their moves at home if you live on a planet with gravity.
+        </div>
+        <div style="margin-top:2rem; display:flex; gap:.8rem; flex-wrap:wrap;">
+          <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="btn"><span>Spotify</span></a>
+          <a href="https://junonuno.bandcamp.com/" target="_blank" rel="noopener" class="btn"><span>Bandcamp</span></a>
+          <a href="mailto:junonunomail@gmail.com" class="btn"><span>Get in Touch</span></a>
+        </div>
+      </div>
+      <div class="bio-photo-stack reveal" style="transition-delay:.15s">
+        <img src="BG2U8640.jpg" alt="Junonuno" class="bio-photo-main">
+        <img src="BG2U9462.jpg" alt="Junonuno live" class="bio-photo-accent">
+        <p class="photo-credit">© Junonuno</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="red-bar"></div>
+
+<!-- PHOTO STRIP -->
+<section id="strip" style="max-width:100%;padding:0;">
+  <div class="strip-inner">
+    <div class="strip-img">
+      <img src="BG2U9692.jpg" alt="Junonuno live">
+    </div>
+    <div class="strip-img">
+      <img src="FOS_Loui-114.JPG" alt="Junonuno live">
+    </div>
+    <div class="strip-img">
+      <img src="BG2U9462.jpg" alt="Junonuno">
+    </div>
+  </div>
+</section>
+
+<div class="red-bar"></div>
+
+<!-- MUSIC -->
+<section id="music" style="max-width:100%;padding:0;">
+  <div class="section-wrap">
+    <div class="section-label reveal">Discography</div>
+    <h2 class="section-title reveal">Music</h2>
+    <div class="music-grid">
+
+      <div class="music-card reveal">
+        <div class="music-num">Latest</div>
+        <div class="music-title">New Release</div>
+        <div class="music-meta">Single · 2025</div>
+        <div class="music-links">
+          <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="music-link">Spotify</a>
+          <a href="https://www.youtube.com/@Junonuno" target="_blank" rel="noopener" class="music-link">YouTube</a>
+          <a href="https://junonuno.bandcamp.com/" target="_blank" rel="noopener" class="music-link">Bandcamp</a>
+        </div>
+      </div>
+
+      <div class="music-card reveal" style="transition-delay:.1s">
+        <div class="music-num">Album II</div>
+        <div class="music-title">New Album</div>
+        <div class="music-meta">Coming Soon</div>
+        <div class="music-links">
+          <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="music-link">Spotify</a>
+          <a href="https://www.youtube.com/@Junonuno" target="_blank" rel="noopener" class="music-link">YouTube</a>
+          <a href="https://junonuno.bandcamp.com/" target="_blank" rel="noopener" class="music-link">Bandcamp</a>
+        </div>
+      </div>
+
+      <div class="music-card reveal" style="transition-delay:.2s">
+        <div class="music-num">Album I</div>
+        <div class="music-title">Eerste</div>
+        <div class="music-meta">Debut Album</div>
+        <div class="music-links">
+          <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="music-link">Spotify</a>
+          <a href="https://www.youtube.com/@Junonuno" target="_blank" rel="noopener" class="music-link">YouTube</a>
+          <a href="https://junonuno.bandcamp.com/" target="_blank" rel="noopener" class="music-link">Bandcamp</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EVENTS -->
+<section id="events" style="max-width:100%;padding:0;">
+  <div class="section-wrap">
+    <div class="section-label reveal">Live</div>
+    <h2 class="section-title reveal">Shows</h2>
+    <div class="events-list reveal">
+
+      <div class="event-row">
+        <div class="event-date">Date TBC</div>
+        <div class="event-venue">Venue Name<small>Bristol, UK</small></div>
+        <div class="event-tag avail">Tickets Available</div>
+        <div class="event-ticket"><a href="#">Buy Tickets →</a></div>
+      </div>
+
+      <div class="event-row">
+        <div class="event-date">Date TBC</div>
+        <div class="event-venue">Venue Name<small>City, UK</small></div>
+        <div class="event-tag avail">Tickets Available</div>
+        <div class="event-ticket"><a href="#">Buy Tickets →</a></div>
+      </div>
+
+      <div class="event-row">
+        <div class="event-date">TBA</div>
+        <div class="event-venue">More Dates Coming<small>Stay Tuned</small></div>
+        <div class="event-tag">Announcing Soon</div>
+        <div class="event-ticket"><a href="https://forms.gle/diHnETBiJ76ESBd88" target="_blank" rel="noopener">Get Notified →</a></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="red-bar"></div>
+
+<!-- GALLERY SCROLL -->
+<section id="gallery">
+  <div class="gallery-scroll" id="galleryScroll">
+    <div class="gallery-item"><img src="BG2U7945.jpg" alt="Junonuno"></div>
+    <div class="gallery-item"><img src="BG2U9692.jpg" alt="Junonuno live" style="object-position:center center;"></div>
+    <div class="gallery-item"><img src="BG2U8640.jpg" alt="Junonuno" style="object-position:center top;"></div>
+    <div class="gallery-item"><img src="FOS_Loui-114.JPG" alt="Junonuno live" style="object-position:center center;"></div>
+    <div class="gallery-item"><img src="BG2U9462.jpg" alt="Junonuno" style="object-position:center center;"></div>
+  </div>
+</section>
+
+<div class="red-bar"></div>
+
+<!-- CONNECT -->
+<section id="connect" style="max-width:100%;padding:0;">
+  <div class="section-wrap" style="position:relative;">
+    <div class="connect-bg"></div>
+    <div class="section-label reveal" style="justify-content:center;">Find Us</div>
+    <h2 class="section-title reveal" style="text-align:center;">Connect</h2>
+
+    <div class="socials-grid reveal">
+      <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="social-link">
+        <svg class="sicon" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        <span>Spotify</span>
+      </a>
+      <a href="https://www.youtube.com/@Junonuno" target="_blank" rel="noopener" class="social-link">
+        <svg class="sicon" viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+        <span>YouTube</span>
+      </a>
+      <a href="https://www.instagram.com/junonunonuno" target="_blank" rel="noopener" class="social-link">
+        <svg class="sicon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        <span>@junonunonuno</span>
+      </a>
+      <a href="https://junonuno.bandcamp.com/" target="_blank" rel="noopener" class="social-link">
+        <svg class="sicon" viewBox="0 0 24 24"><path d="M0 18.75l7.437-13.5H24l-7.438 13.5z"/></svg>
+        <span>Bandcamp</span>
+      </a>
+      <a href="mailto:junonunomail@gmail.com" class="social-link">
+        <svg class="sicon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <span>Email Us</span>
+      </a>
+    </div>
+
+    <div class="mailing-wrap reveal">
+      <p class="mailing-label">Join the mailing list — first for new music, videos &amp; shows</p>
+      <a href="https://forms.gle/diHnETBiJ76ESBd88" target="_blank" rel="noopener" class="mailing-btn"><span>Join the List →</span></a>
+    </div>
+  </div>
+</section>
+
+<div class="chrome-bar"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><img src="JN_Logo.png" alt="Junonuno"></div>
+  <p>© 2025 Junonuno. All rights reserved.</p>
+  <p><a href="mailto:junonunomail@gmail.com">junonunomail@gmail.com</a></p>
+</footer>
+
+<script>
+  // Cursor
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('cur-r');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  (function anim(){
+    rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
+    curR.style.left=rx+'px'; curR.style.top=ry+'px';
+    requestAnimationFrame(anim);
+  })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ cur.style.width='18px'; cur.style.height='18px'; curR.style.width='44px'; curR.style.height='44px'; });
+    el.addEventListener('mouseleave',()=>{ cur.style.width='8px'; cur.style.height='8px'; curR.style.width='28px'; curR.style.height='28px'; });
+  });
+
+  // Parallax hero bg
+  window.addEventListener('scroll',()=>{
+    const bg=document.getElementById('heroBg');
+    bg.style.transform=`translateY(${window.scrollY*.3}px)`;
+  });
+
+  // Scroll reveal
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
+  },{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // Gallery drag scroll
+  const gs=document.getElementById('galleryScroll');
+  let isDown=false,startX,scrollL;
+  gs.addEventListener('mousedown',e=>{isDown=true;startX=e.pageX-gs.offsetLeft;scrollL=gs.scrollLeft;});
+  gs.addEventListener('mouseleave',()=>isDown=false);
+  gs.addEventListener('mouseup',()=>isDown=false);
+  gs.addEventListener('mousemove',e=>{
+    if(!isDown)return; e.preventDefault();
+    const x=e.pageX-gs.offsetLeft; gs.scrollLeft=scrollL-(x-startX)*1.5;
+  });
+</script>
+</body>
+</html>
