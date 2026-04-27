@@ -1019,17 +1019,6 @@ document.getElementById('page-home').addEventListener('mousemove', e=>{
   homeBg.style.transform=`translate(${x}px,${y}px) scale(1.05)`;
 });
 
-// Swipe support for touch
-let touchStartX=0;
-document.addEventListener('touchstart',e=>{ touchStartX=e.touches[0].clientX; },{passive:true});
-document.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-touchStartX;
-  const order=['home','about','music','shows','connect'];
-  const i=order.indexOf(current);
-  if(dx < -60 && i<order.length-1) goTo(order[i+1]);
-  if(dx >  60 && i>0) goTo(order[i-1]);
-});
-
 // Handle mailing list submission
 function handleMailingList(e) {
     const formUrl = 'https://forms.gle/diHnETBiJ76ESBd88';
