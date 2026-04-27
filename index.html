@@ -36,17 +36,23 @@ body {
    CURSOR
 ═══════════════════════════════════════════ */
 #cur {
-  position:fixed; width:36px; height:36px;
-  background:url('JN_Logo.png') center/contain no-repeat;
-  transform:translate(-50%,-50%);
+  position:fixed; width:11px; height:11px;
+  border:2px solid var(--red);
+  transform:translate(-50%,-50%) rotate(45deg);
   pointer-events:none; z-index:9999;
-  transition:width .15s, height .15s, opacity .15s;
-  filter:drop-shadow(0 0 4px rgba(192,36,42,0.5));
+  transition:width .15s,height .15s,background .15s,border-color .15s;
 }
-#cur-r { display:none; }
-.cur-big #cur { width:48px; height:48px; filter:drop-shadow(0 0 8px rgba(192,36,42,0.8)); }
+#cur-r {
+  position:fixed; width:30px; height:30px;
+  border:1px solid rgba(160,160,160,0.25);
+  border-radius:50%; pointer-events:none; z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:width .25s,height .25s;
+}
+.cur-big #cur   { background:var(--red); width:7px; height:7px; }
+.cur-big #cur-r { width:42px; height:42px; }
 
-@media (pointer:coarse) { #cur { display:none; } body { cursor:auto; } }
+@media (pointer:coarse) { #cur,#cur-r { display:none; } body { cursor:auto; } }
 
 /* ═══════════════════════════════════════════
    PAGE SYSTEM
@@ -119,7 +125,7 @@ body {
 
 .home-bg {
   position:absolute; inset:0;
-  background-image:url('BG2U7945.jpg');
+  background-image:url('header.jpg');
   background-size:cover; background-position:center 22%;
   filter:brightness(0.25) saturate(0.4);
   will-change:transform;
@@ -288,7 +294,23 @@ body {
 /* ═══════════════════════════════════════════
    PAGE 2 — MUSIC
 ═══════════════════════════════════════════ */
-#page-music .page-body { padding:2rem; display:flex; flex-direction:column; gap:1.5rem; }
+#page-music .page-body { 
+  padding:2rem; display:flex; flex-direction:column; gap:1.5rem;
+  background-image: url('eerste-cover.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+}
+#page-music .page-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(8,8,8,0.92);
+  backdrop-filter: blur(8px);
+  z-index: 0;
+}
+#page-music .page-body > * { position: relative; z-index: 1; }
 
 .music-page-title {
   font-family:'Archivo Black',Arial,sans-serif; font-weight:900;
@@ -331,6 +353,70 @@ body {
 .music-blurb {
   font-size:.82rem; line-height:1.82; color:var(--chrome-lo);
   max-width:640px;
+}
+
+.singles-section { margin-top:1rem; }
+.singles-title {
+  font-family:'Archivo Black',Arial,sans-serif; font-weight:900;
+  font-size:1.4rem; text-transform:uppercase; color:var(--chrome-hi);
+  margin-bottom:1rem; letter-spacing:.05em;
+}
+.singles-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:1rem;
+}
+.single-card {
+  border:1px solid var(--chrome-border);
+  background:rgba(0,0,0,0.6);
+  transition:all .22s;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.single-card:hover {
+  border-color:var(--chrome-mid);
+  background:rgba(0,0,0,0.8);
+  transform:translateY(-4px);
+}
+.single-img-wrap {
+  width:100%;
+  aspect-ratio:1;
+  overflow:hidden;
+  background:var(--black-2);
+}
+.single-img-wrap img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .3s;
+}
+.single-card:hover .single-img-wrap img { transform:scale(1.05); }
+.single-info {
+  padding:1rem;
+  display:flex;
+  flex-direction:column;
+  gap:.4rem;
+  flex:1;
+}
+.single-title {
+  font-family:'Archivo Black',Arial,sans-serif;
+  font-size:.95rem; font-weight:900;
+  text-transform:uppercase;
+  color:var(--chrome-hi);
+  line-height:1.1;
+}
+.single-meta {
+  font-size:.58rem; font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--chrome-lo);
+}
+.single-streams {
+  font-size:.62rem; font-weight:700;
+  color:var(--red);
+  letter-spacing:.05em;
+  margin-top:.2rem;
+}
+.single-info .release-link {
+  margin-top:auto;
+  padding:.5rem .75rem;
+  font-size:.6rem;
 }
 
 /* ═══════════════════════════════════════════
@@ -456,6 +542,73 @@ body {
 }
 .ml-btn:hover { background:var(--chrome-mid); }
 
+.contact-form {
+  display:flex; flex-direction:column; gap:.8rem;
+}
+.form-group {
+  display:flex; flex-direction:column; gap:.4rem;
+}
+.form-group label {
+  font-size:.6rem; font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--chrome-lo);
+}
+.form-group input,
+.form-group textarea {
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--chrome-border);
+  padding:.75rem;
+  font-family:Arial,sans-serif;
+  font-size:.82rem;
+  color:var(--chrome-hi);
+  transition:border-color .2s, background .2s;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  outline:none;
+  border-color:var(--chrome-mid);
+  background:rgba(255,255,255,0.05);
+}
+.form-group textarea {
+  min-height:120px;
+  resize:vertical;
+}
+.form-submit-btn {
+  padding:1rem;
+  font-family:'Archivo Black',Arial,sans-serif;
+  font-weight:900;
+  font-size:.82rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-align:center;
+  cursor:none;
+  background:var(--red);
+  color:#fff;
+  border:none;
+  transition:background .2s;
+}
+.form-submit-btn:hover {
+  background:rgba(192,36,42,0.8);
+}
+.ml-input {
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--chrome-border);
+  padding:.75rem;
+  font-family:Arial,sans-serif;
+  font-size:.82rem;
+  color:var(--chrome-hi);
+  margin-bottom:.8rem;
+  transition:border-color .2s, background .2s;
+}
+.ml-input:focus {
+  outline:none;
+  border-color:var(--red);
+  background:rgba(255,255,255,0.05);
+}
+.ml-input::placeholder {
+  color:var(--chrome-lo);
+  opacity:0.6;
+}
+
 /* ═══════════════════════════════════════════
    CHROME DIVIDERS / DETAILS
 ═══════════════════════════════════════════ */
@@ -492,6 +645,7 @@ body {
 <body>
 
 <div id="cur"></div>
+<div id="cur-r"></div>
 
 <!-- ══════════════════════════════════════
      PAGE: HOME
@@ -522,12 +676,12 @@ body {
       <img src="JN_Logo.png" alt="Junonuno" class="home-logo">
     </div>
     <div class="home-cta">
-      <button onclick="goTo('music')" class="btn btn-primary">Listen</button>
-      <button onclick="goTo('shows')" class="btn">Upcoming Events</button>
+      <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="btn btn-primary">Listen on Spotify</a>
+      <button onclick="goTo('shows')" class="btn">Upcoming Shows</button>
     </div>
   </div>
 
-  <div class="home-footer">Bristol · Boogie Land · Est. 2021</div>
+  <div class="home-footer">Bristol · Planet Earth · Est. 2021</div>
 </div>
 
 
@@ -550,7 +704,7 @@ body {
     <div class="about-layout">
 
       <div class="about-photo-col">
-        <img src="BG2U8640.jpg" alt="Junonuno band photo">
+        <img src="profile.jpg" alt="Junonuno band photo">
         <div class="about-photo-overlay"></div>
       </div>
 
@@ -624,9 +778,9 @@ body {
     <div class="releases-grid">
 
       <div class="release-card">
-        <div class="release-num">SINGLE</div>
-        <div class="release-title">Feeling Good</div>
-        <div class="release-meta">2026</div>
+        <div class="release-num">02</div>
+        <div class="release-title">New Album</div>
+        <div class="release-meta">Coming Soon</div>
         <div class="release-links">
           <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="release-link">→ Spotify</a>
           <a href="https://www.youtube.com/@Junonuno" target="_blank" rel="noopener" class="release-link">→ YouTube</a>
@@ -635,31 +789,9 @@ body {
       </div>
 
       <div class="release-card">
-        <div class="release-num">SINGLE</div>
-        <div class="release-title">Now</div>
-        <div class="release-meta">2025</div>
-        <div class="release-links">
-          <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="release-link">→ Spotify</a>
-          <a href="https://www.youtube.com/@Junonuno" target="_blank" rel="noopener" class="release-link">→ YouTube</a>
-          <a href="https://junonuno.bandcamp.com/" target="_blank" rel="noopener" class="release-link">→ Bandcamp</a>
-        </div>
-      </div>
-
-      <div class="release-card">
-        <div class="release-num">SINGLE</div>
-        <div class="release-title">Haunt You</div>
-        <div class="release-meta">2025</div>
-        <div class="release-links">
-          <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="release-link">→ Spotify</a>
-          <a href="https://www.youtube.com/@Junonuno" target="_blank" rel="noopener" class="release-link">→ YouTube</a>
-          <a href="https://junonuno.bandcamp.com/" target="_blank" rel="noopener" class="release-link">→ Bandcamp</a>
-        </div>
-      </div>
-
-      <div class="release-card">
-        <div class="release-num">ALBUM</div>
+        <div class="release-num">01</div>
         <div class="release-title">Eerste</div>
-        <div class="release-meta">2024</div>
+        <div class="release-meta">Debut Album</div>
         <div class="release-links">
           <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="release-link">→ Spotify</a>
           <a href="https://www.youtube.com/@Junonuno" target="_blank" rel="noopener" class="release-link">→ YouTube</a>
@@ -669,8 +801,53 @@ body {
 
     </div>
 
+    <div class="singles-section">
+      <h2 class="singles-title">Singles</h2>
+      <div class="singles-grid">
+        
+        <div class="single-card">
+          <div class="single-img-wrap"><img src="i-want-it.jpg" alt="I Want It single cover"></div>
+          <div class="single-info">
+            <h3 class="single-title">I Want It</h3>
+            <p class="single-meta">Single • 2025</p>
+            <p class="single-streams">🔥 Hot Right Now</p>
+            <a href="https://junonuno.bandcamp.com/track/i-want-it" target="_blank" rel="noopener" class="release-link">→ Listen</a>
+          </div>
+        </div>
+
+        <div class="single-card">
+          <div class="single-img-wrap"><img src="feeling-good.jpg" alt="Feeling Good single cover"></div>
+          <div class="single-info">
+            <h3 class="single-title">Feeling Good</h3>
+            <p class="single-meta">Single • 2026</p>
+            <p class="single-streams">🔥 New</p>
+            <a href="https://junonuno.bandcamp.com/track/feeling-good" target="_blank" rel="noopener" class="release-link">→ Listen</a>
+          </div>
+        </div>
+
+        <div class="single-card">
+          <div class="single-img-wrap"><img src="now.jpg" alt="Now single cover"></div>
+          <div class="single-info">
+            <h3 class="single-title">Now</h3>
+            <p class="single-meta">Single • 2025</p>
+            <a href="https://junonuno.bandcamp.com/track/now" target="_blank" rel="noopener" class="release-link">→ Listen</a>
+          </div>
+        </div>
+
+        <div class="single-card">
+          <div class="single-img-wrap"><img src="haunt-you.jpg" alt="Haunt You single cover"></div>
+          <div class="single-info">
+            <h3 class="single-title">Haunt You</h3>
+            <p class="single-meta">Single • 2025</p>
+            <a href="https://junonuno.bandcamp.com/track/haunt-you" target="_blank" rel="noopener" class="release-link">→ Listen</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <p class="music-blurb">
-      New album incoming...
+      The second album is on its way...
       Keep an eye on our socials or <button onclick="goTo('connect')" style="background:none;border:none;color:var(--chrome-mid);font-weight:700;font-size:.82rem;cursor:none;text-decoration:underline;text-underline-offset:3px;padding:0;" class="inline-link">join the mailing list</button> to be first to know.
     </p>
   </div>
@@ -698,28 +875,16 @@ body {
 
     <div class="shows-table">
       <div class="show-row">
-        <div class="show-date">Date TBC</div>
-        <div class="show-venue">Venue Name<small>Bristol, UK</small></div>
-        <div class="show-status avail">Available</div>
-        <div class="show-action"><a href="#">Buy Tickets →</a></div>
-      </div>
-      <div class="show-row">
-        <div class="show-date">Date TBC</div>
-        <div class="show-venue">Venue Name<small>City, UK</small></div>
-        <div class="show-status avail">Available</div>
-        <div class="show-action"><a href="#">Buy Tickets →</a></div>
-      </div>
-      <div class="show-row">
         <div class="show-date">TBA</div>
-        <div class="show-venue">More dates<small>Watch this space</small></div>
-        <div class="show-status soon">Soon</div>
+        <div class="show-venue">The Universe<small>Earth (mostly)</small></div>
+        <div class="show-status soon">Plotting</div>
         <div class="show-action"><a href="https://forms.gle/diHnETBiJ76ESBd88" target="_blank" rel="noopener">Get Notified →</a></div>
       </div>
     </div>
 
     <div class="shows-notify">
       <p class="notify-text">
-        <strong>Don't miss a show.</strong> Join the mailing list and we'll let you know the moment new dates drop.
+        <strong>We're currently in the studio cooking up new material.</strong> When we emerge blinking into daylight with actual tour dates, you'll be the first to know. Promise.
       </p>
       <a href="https://forms.gle/diHnETBiJ76ESBd88" target="_blank" rel="noopener" class="btn btn-primary" style="white-space:nowrap;">Join List →</a>
     </div>
@@ -749,9 +914,29 @@ body {
     <div class="connect-grid">
 
       <div class="connect-panel">
-        <span class="panel-label">Socials &amp; Contact</span>
-        <p class="connect-blurb">Reach out, say hello, tell us your favourite biscuit. We are real human beings who do human things, so we will probably reply.</p>
-        <a href="/cdn-cgi/l/email-protection#107a657e7f7e657e7f7d71797c50777d71797c3e737f7d" class="connect-email-link"><span class="__cf_email__" data-cfemail="91fbe4fffeffe4fffefcf0f8fdd1f6fcf0f8fdbff2fefc">[email&#160;protected]</span></a>
+        <span class="panel-label">Get In Touch</span>
+        <p class="connect-blurb">Got a question? Want to collaborate? Just want to chat about music? Drop us a message below.</p>
+        
+        <form class="contact-form" id="contactForm" onsubmit="handleContactSubmit(event)">
+          <div class="form-group">
+            <label for="contact-name">Name</label>
+            <input type="text" id="contact-name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="contact-email">Email</label>
+            <input type="email" id="contact-email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="contact-message">Message</label>
+            <textarea id="contact-message" name="message" required></textarea>
+          </div>
+          <button type="submit" class="form-submit-btn">Send Message →</button>
+        </form>
+      </div>
+
+      <div class="connect-panel">
+        <span class="panel-label">Follow Us</span>
+        <p class="connect-blurb">Stay up to date with all things Junonuno. New releases, behind-the-scenes content, and the occasional meme.</p>
         <div class="socials-stack">
           <a href="https://open.spotify.com/artist/7cqGdrifmHVu2IV8gsCTbS" target="_blank" rel="noopener" class="social-row">
             <svg class="sicon" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
@@ -775,10 +960,10 @@ body {
       <div class="connect-panel highlight">
         <span class="panel-label">Mailing List</span>
         <p class="ml-copy">
-          New music. New shows. Occasional nonsense.<br><br>
+          New music. New shows. Awh.<br><br>
           Join the list and we promise to only contact you when something <strong>actually interesting</strong> is happening.
         </p>
-        <a href="https://forms.gle/diHnETBiJ76ESBd88" target="_blank" rel="noopener" class="ml-btn">Join the Mailing List →</a>
+        <a href="https://forms.gle/diHnETBiJ76ESBd88" target="_blank" rel="noopener" class="ml-btn" onclick="handleMailingList(event)">Join the Mailing List →</a>
       </div>
 
     </div>
@@ -788,14 +973,16 @@ body {
 <!-- ═══════════════════════════════════════════
      JS
 ═══════════════════════════════════════════ -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ── Cursor ──
 const cur = document.getElementById('cur');
-let mx=0,my=0;
+const curR = document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{
   mx=e.clientX; my=e.clientY;
   cur.style.left=mx+'px'; cur.style.top=my+'px';
 });
+(function anim(){ rx+=(mx-rx)*.1; ry+=(my-ry)*.1; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(anim); })();
 document.querySelectorAll('a,button').forEach(el=>{
   el.addEventListener('mouseenter',()=>document.body.classList.add('cur-big'));
   el.addEventListener('mouseleave',()=>document.body.classList.remove('cur-big'));
@@ -843,6 +1030,30 @@ document.addEventListener('touchend',e=>{
   if(dx < -60 && i<order.length-1) goTo(order[i+1]);
   if(dx >  60 && i>0) goTo(order[i-1]);
 });
+
+// Handle mailing list submission
+function handleMailingList(e) {
+    const formUrl = 'https://forms.gle/diHnETBiJ76ESBd88';
+    window.open(formUrl, '_blank');
+}
+
+// Handle contact form submission via mailto
+function handleContactSubmit(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('contact-name').value;
+  const email = document.getElementById('contact-email').value;
+  const message = document.getElementById('contact-message').value;
+  
+  const subject = encodeURIComponent('Website Contact from ' + name);
+  const body = encodeURIComponent(
+    'Name: ' + name + '\n' +
+    'Email: ' + email + '\n\n' +
+    'Message:\n' + message
+  );
+  
+  window.location.href = 'mailto:junonunomail@gmail.com?subject=' + subject + '&body=' + body;
+}
 </script>
 
 </body>
