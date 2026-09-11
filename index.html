@@ -318,6 +318,35 @@ body {
 }
 .music-page-title .stroke { -webkit-text-stroke:2px var(--chrome-mid); color:transparent; }
 
+.featured-single {
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:1.6rem;
+  border:1px solid rgba(192,36,42,0.4);
+  background:linear-gradient(120deg, rgba(192,36,42,0.08), rgba(255,255,255,0.02));
+  padding:1.6rem;
+  align-items:center;
+  position:relative;
+}
+.featured-single .fs-badge {
+  position:absolute; top:-.6rem; left:1.2rem;
+  background:var(--red); color:#fff;
+  font-size:.56rem; font-weight:700; letter-spacing:.22em;
+  padding:.25rem .6rem; text-transform:uppercase;
+}
+.featured-single .fs-img {
+  width:100%; aspect-ratio:1; overflow:hidden; border:1px solid var(--chrome-border);
+}
+.featured-single .fs-img img { width:100%; height:100%; object-fit:cover; display:block; }
+.featured-single .fs-info { display:flex; flex-direction:column; gap:.6rem; }
+.featured-single .fs-title {
+  font-family:'Archivo Black',Arial,sans-serif; font-weight:900;
+  font-size:clamp(1.4rem,3vw,2.2rem); text-transform:uppercase; color:var(--chrome-hi); line-height:1.02;
+}
+.featured-single .fs-meta { font-size:.62rem; font-weight:700; letter-spacing:.14em; color:var(--chrome-lo); text-transform:uppercase; }
+.featured-single .fs-blurb { font-size:.82rem; line-height:1.7; color:var(--chrome-lo); max-width:520px; }
+.featured-single .fs-actions { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.2rem; }
+
 .releases-grid {
   display:block;
   border:1px solid var(--chrome-border);
@@ -476,6 +505,16 @@ body {
   padding:1.3rem 0; border-bottom:1px solid var(--chrome-border);
   transition:background .18s; padding-left:.5rem; padding-right:.5rem;
 }
+
+.shows-empty {
+  border:1px dashed var(--chrome-border);
+  padding:2.5rem 1.8rem;
+  text-align:center;
+  color:var(--chrome-lo);
+  font-size:.8rem;
+  letter-spacing:.05em;
+}
+
 .show-row:hover { background:rgba(255,255,255,0.024); }
 .show-date { font-size:.65rem; font-weight:700; letter-spacing:.08em; color:var(--chrome-lo); text-transform:uppercase; }
 .show-venue {
@@ -681,6 +720,9 @@ body {
   .video-feature {
   grid-template-columns:1fr;
   gap:1rem;
+
+  .featured-single { grid-template-columns:1fr; }
+  .featured-single .fs-img { max-width:220px; margin:0 auto; }
 }
 }
 </style>
@@ -819,6 +861,21 @@ body {
     <h1 class="music-page-title">Our <span class="stroke">Music</span></h1>
     <div class="chrome-rule"></div>
 
+    <div class="featured-single">
+  <span class="fs-badge">New Single</span>
+  <div class="fs-img">
+    <img src="i-want-it-remix.jpg" alt="I Want It - DJ Juno Mix artwork">
+  </div>
+  <div class="fs-info">
+    <div class="fs-title">I Want It <span style="color:var(--chrome-lo);">(DJ Juno Mix)</span></div>
+    <div class="fs-meta">Single · 2026</div>
+    <p class="fs-blurb">A fresh mix of the fan favourite, out now.</p>
+    <div class="fs-actions">
+      <a href="https://open.spotify.com/track/3zi2syjYYjSTPFutFXU5E5" target="_blank" rel="noopener" class="btn btn-primary">Listen on Spotify</a>
+    </div>
+  </div>
+</div>
+
     <section class="video-feature">
 
   <div class="video-player">
@@ -860,6 +917,16 @@ body {
     <div class="singles-section">
       <h2 class="singles-title">Singles</h2>
       <div class="singles-grid">
+
+        <div class="single-card">
+          <div class="single-img-wrap"><img src="https://i.scdn.co/image/ab67616d0000b2738c87d0f50f3562f9deca5397" alt="I Want It - DJ Juno Mix single cover"></div>
+          <div class="single-info">
+            <h3 class="single-title">I Want It (DJ Juno Mix)</h3>
+            <p class="single-meta">Single • 2026</p>
+            <p class="single-streams">🔥 New</p>
+            <a href="https://open.spotify.com/track/3zi2syjYYjSTPFutFXU5E5" target="_blank" rel="noopener" class="release-link">→ Listen</a>
+          </div>
+        </div>
         
         <div class="single-card">
           <div class="single-img-wrap"><img src="i-want-it.jpg" alt="I Want It single cover"></div>
@@ -876,7 +943,6 @@ body {
           <div class="single-info">
             <h3 class="single-title">Feeling Good</h3>
             <p class="single-meta">Single • 2026</p>
-            <p class="single-streams">🔥 New</p>
             <a href="https://open.spotify.com/album/6r4Ky8tLU5GiIt2FKGPjjV?si=UbUbjABEQLqex_Yw4Hrk7A" target="_blank" rel="noopener" class="release-link">→ Listen</a>
           </div>
         </div>
@@ -925,13 +991,17 @@ body {
     <h1 class="shows-title"><span class="stroke">Upcoming</span> Shows</h1>
     <div class="chrome-rule"></div>
 
-    <div class="shows-table">
+    <!-- <div class="shows-table">
       <div class="show-row">
         <div class="show-date">18th July</div>
         <div class="show-venue">Nowadaze Festival<small>Bristol</small></div>
         <div class="show-status soon">Coming up</div>
         <div class="show-action"><a href="https://nowadaze-festival.co.uk/tickets" target="_blank" rel="noopener">Tickets →</a></div>
       </div>
+    </div> -->
+
+    <div class="shows-empty">
+    No shows on the books right now — check back soon, or join the list below to hear first.
     </div>
 
     <div class="shows-notify">
