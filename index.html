@@ -311,6 +311,9 @@ body {
 }
 #page-music .page-body > * { position: relative; z-index: 1; }
 
+/* NEW: stop flex children being squashed on short screens */
+#page-music .page-body > * { flex-shrink:0; }
+
 .music-page-title {
   font-family:'Archivo Black',Arial,sans-serif; font-weight:900;
   font-size:clamp(2rem,5vw,4rem); text-transform:uppercase; line-height:1;
@@ -717,13 +720,21 @@ body {
 
   .home-logo { width:min(300px,82vw); }
 
+  /* FIXED: missing closing brace used to swallow the featured-single rules */
   .video-feature {
-  grid-template-columns:1fr;
-  gap:1rem;
+    grid-template-columns:1fr;
+    gap:1rem;
+  }
 
-  .featured-single { grid-template-columns:1fr; }
-  .featured-single .fs-img { max-width:220px; margin:0 auto; }
-}
+  .featured-single {
+    grid-template-columns:1fr;
+    padding:1.4rem 1.2rem 1.2rem;
+    gap:1.2rem;
+    text-align:center;
+  }
+  .featured-single .fs-img { max-width:240px; margin:0 auto; }
+  .featured-single .fs-info { align-items:center; }
+  .featured-single .fs-actions { justify-content:center; }
 }
 </style>
 </head>
@@ -862,45 +873,44 @@ body {
     <div class="chrome-rule"></div>
 
     <div class="featured-single">
-  <span class="fs-badge">New Single</span>
-  <div class="fs-img">
-    <img src="i-want-it-remix.jpg" alt="I Want It - DJ Juno Mix artwork">
-  </div>
-  <div class="fs-info">
-    <div class="fs-title">I Want It <span style="color:var(--chrome-lo);">(DJ Juno Mix)</span></div>
-    <div class="fs-meta">Single · 2026</div>
-    <p class="fs-blurb">A fresh mix of the fan favourite, out now.</p>
-    <div class="fs-actions">
-      <a href="https://open.spotify.com/track/3zi2syjYYjSTPFutFXU5E5" target="_blank" rel="noopener" class="btn btn-primary">Listen on Spotify</a>
+      <span class="fs-badge">New Single</span>
+      <div class="fs-img">
+        <img src="i-want-it-remix.jpg" alt="I Want It - DJ Juno Mix artwork">
+      </div>
+      <div class="fs-info">
+        <div class="fs-title">I Want It <span style="color:var(--chrome-lo);">(DJ Juno Mix)</span></div>
+        <div class="fs-meta">Single · 2026</div>
+        <p class="fs-blurb">A fresh mix of the fan favourite, out now, with the original included.</p>
+        <div class="fs-actions">
+          <a href="https://open.spotify.com/track/3zi2syjYYjSTPFutFXU5E5" target="_blank" rel="noopener" class="btn btn-primary">Listen on Spotify</a>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
     <section class="video-feature">
 
-  <div class="video-player">
-    <iframe
-      src="https://www.youtube.com/embed/kRhDNLA6tRk?si=FlrpNr9bc_jueb_H"
-      title="Feeling Good Music Video"
-      allowfullscreen>
-    </iframe>
-  </div>
+      <div class="video-player">
+        <iframe
+          src="https://www.youtube.com/embed/kRhDNLA6tRk?si=FlrpNr9bc_jueb_H"
+          title="Feeling Good Music Video"
+          allowfullscreen>
+        </iframe>
+      </div>
 
-  <div class="video-info">
-    <h2>Latest Video</h2>
+      <div class="video-info">
+        <h2>Latest Video</h2>
 
-    <p>
-      The official music video for <strong>Feeling Good</strong>.
-    </p>
+        <p>
+          The official music video for <strong>Feeling Good</strong>.
+        </p>
 
-  </div>
-
+      </div>
 
     </section>
 
     <div class="releases-grid">
 
-       <div class="release-card">
+      <div class="release-card">
         <div class="release-num">01</div>
         <div class="single-img-wrap" style="margin-bottom:.8rem;aspect-ratio:1;max-width:400px;"><img src="eerste-cover.jpg" alt="Eerste album artwork"></div>
         <div class="release-title">Eerste</div>
@@ -918,23 +928,14 @@ body {
       <h2 class="singles-title">Singles</h2>
       <div class="singles-grid">
 
+        <!-- MERGED: I Want It (original + DJ Juno Mix) -->
         <div class="single-card">
-          <div class="single-img-wrap"><img src="https://i.scdn.co/image/ab67616d0000b2738c87d0f50f3562f9deca5397" alt="I Want It - DJ Juno Mix single cover"></div>
-          <div class="single-info">
-            <h3 class="single-title">I Want It (DJ Juno Mix)</h3>
-            <p class="single-meta">Single • 2026</p>
-            <p class="single-streams">🔥 New</p>
-            <a href="https://open.spotify.com/track/3zi2syjYYjSTPFutFXU5E5" target="_blank" rel="noopener" class="release-link">→ Listen</a>
-          </div>
-        </div>
-        
-        <div class="single-card">
-          <div class="single-img-wrap"><img src="i-want-it.jpg" alt="I Want It single cover"></div>
+          <div class="single-img-wrap"><img src="https://i.scdn.co/image/ab67616d0000b2738c87d0f50f3562f9deca5397" alt="I Want It single cover"></div>
           <div class="single-info">
             <h3 class="single-title">I Want It</h3>
-            <p class="single-meta">Single • 2025</p>
-            <p class="single-streams">🔥 Hot Right Now</p>
-            <a href="https://open.spotify.com/album/4SDDm0u3HO7e3O9n3NjEy3?si=XVoPvrbCTIq5Ivo7YeUUpA" target="_blank" rel="noopener" class="release-link">→ Listen</a>
+            <p class="single-meta">Single • 2026 • Original + DJ Juno Mix</p>
+            <p class="single-streams">🔥 New</p>
+            <a href="https://open.spotify.com/track/3zi2syjYYjSTPFutFXU5E5" target="_blank" rel="noopener" class="release-link">→ Listen</a>
           </div>
         </div>
 
